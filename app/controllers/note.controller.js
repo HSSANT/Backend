@@ -119,3 +119,10 @@ exports.delete = (req, res) => {
         });
     });
 };
+
+exports.mailJet = (req, res) => {
+   
+            return res.status(200).send({
+                message: "email send"
+            });
+};

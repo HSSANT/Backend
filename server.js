@@ -16,17 +16,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Connecting to the database
-mongoose
-  .connect(dbConfig.url, {
-    useNewUrlParser: true
-  })
-  .then(() => {
-    console.log("Successfully connected to the database");
-  })
-  .catch(err => {
-    console.log("Could not connect to the database. Exiting now...", err);
-    process.exit();
-  });
+// mongoose
+//   .connect(dbConfig.url, {
+//     useNewUrlParser: true
+//   })
+//   .then(() => {
+//     console.log("Successfully connected to the database");
+//   })
+//   .catch(err => {
+//     console.log("Could not connect to the database. Exiting now...", err);
+//     process.exit();
+//   });
 
 // define a simple route
 app.get("/", (req, res) => {
@@ -36,7 +36,17 @@ app.get("/", (req, res) => {
   });
 });
 require("./app/routes/note.routes.js")(app);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+const swaggerOptions = {
+  customCss: '.swagger-ui img { content:url("https://cdn.freebiesupply.com/logos/large/2x/chubb-4-logo-svg-vector.svg"); }'
+};
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument,swaggerOptions));
+
+
+app.use( (request, response, next) => {
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 // listen for requests
 app.listen(1234, () => {

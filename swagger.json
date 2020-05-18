@@ -1,28 +1,27 @@
 {
     "swagger": "2.0",
+"securityDefinitions": {
+    "Bearer": {
+       "name": "Authorization",
+        "in": "header",
+        "type": "apiKey"
+    }
+},
     "info": {
       "version": "1.0.0",
-      "title": "Back end",
-      "description": "My first back end",
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
-      }
+      "title": "Mobiliza Chubb Mobile App",
+      "description": "Backend for mobile application"
     },
-    "host": "localhost:1234",
-    "basePath": "",
+    "host": "1234-c2c3b0ad-7b8f-4c94-9a4d-4c6211066e93.ws-us02.gitpod.io",
+    "basePath": "/",
     "tags": [
       {
-        "name": "Users",
-        "description": "API for users in the system"
-      },
-      {
-        "name": "Notes",
-        "description": "API for managing notes in the system"
+        "name": "Email",
+        "description": "Api for send emails in mobile application"
       }
     ],
     "schemes": [
-      "http", "https"
+      "https"
     ],
     "consumes": [
       "application/x-www-form-urlencoded"
@@ -31,20 +30,43 @@
       "application/x-www-form-urlencoded"
     ],
     "paths": {
-
-      "/notes": {
-        "post": {
+      "/mailjet":{
+           "get": {
+            "security": [
+            {
+                "Bearer": []
+            }
+            ],
           "tags": [
-            "Notes"
+            "mailjet"
           ],
-          "description": "Create new note in system",
+          "description": "Send Email in Chubb Mobile Apps",
+          "produces": [
+            "application/x-www-form-urlencoded"
+          ],
+          "responses": {
+            "200": {
+              "description": "Email has been send"
+            }
+          }
+        },
+       "post": {
+            "security": [
+            {
+                "Bearer": []
+            }
+            ],
+          "tags": [
+            "mailjet"
+          ],
+          "description": "Send Email in Chubb Mobile Apps",
           "parameters": [
             {
-              "name": "Create note",
+              "name": "email",
               "in": "body",
-              "description": "Notes that we want to create",
+              "description": "email for send",
               "schema": {
-                "$ref": "#/definitions/Note"
+                "$ref": "#/definitions/Email"
               }
             }
           ],
@@ -53,86 +75,9 @@
           ],
           "responses": {
             "200": {
-              "description": "New note is created",
+              "description": "Email has been send",
               "schema": {
-                "$ref": "#/definitions/Note"
-              }
-            }
-          }
-        },
-        "get": {
-          "tags": [
-            "Users"
-          ],
-          "summary": "Get all users in system",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/definitions/Users"
-              }
-            }
-          }
-        }
-      },
-      "/users/{userId}": {
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "description": "ID of user that we want to find",
-            "type": "string"
-          }
-        ],
-        "get": {
-          "tags": [
-            "Users"
-          ],
-          "summary": "Get user with given ID",
-          "responses": {
-            "200": {
-              "description": "User is found",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        },
-        "delete": {
-          "summary": "Delete user with given ID",
-          "tags": [
-            "Users"
-          ],
-          "responses": {
-            "200": {
-              "description": "User is deleted",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        },
-        "put": {
-          "summary": "Update user with give ID",
-          "tags": [
-            "Users"
-          ],
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "User with new values of properties",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "User is updated",
-              "schema": {
-                "$ref": "#/definitions/User"
+                "$ref": "#/definitions/Email"
               }
             }
           }
@@ -140,43 +85,27 @@
       }
     },
     "definitions": {
-      "User": {
+      "Email": {
         "required": [
-          "email",
-          "_id"
+          "from",
+          "to",
+          "content",
+          "attach"
         ],
         "properties": {
-          "_id": {
-            "type": "string",
-            "uniqueItems": true
-          },
-          "email": {
-            "type": "string",
-            "uniqueItems": true
-          },
-          "lastName": {
+          "from": {
             "type": "string"
           },
-          "firstName": {
+           "to": {
+            "type": "string"
+          },
+           "content": {
+            "type": "string"
+          },
+          "attach": {
             "type": "string"
           }
-        }
-      },
-      "Users": {
-        "type": "array",
-        "$ref": "#/definitions/User"
-      },
-      "Note": {
-        "required": [
-          "content"
-          ],
-        "properties": {
-          "content": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          }
+      
         }
       }
     }
